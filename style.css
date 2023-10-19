@@ -1,0 +1,38 @@
+* {
+    font-family: 'Nunito', Arial, Helvetica, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+#section-main-page {
+    display: flex;
+    width: 75%;
+    justify-content: space-around;
+}
+
+.input-area {
+    width: 40%;
+    padding: 20px
+}
+
+#add-search {
+    display: flex;
+    flex-flow: column;
+    border: rgba(255, 255, 255, 0.609) solid 1px;
+
+}
+
+#search-word {
+    border: rgba(255, 255, 255, 0.609) solid 1px;
+}
+
+#insert-button {
+    margin-top: 10px;
+}

@@ -1,5 +1,5 @@
 
-let list = [];
+let wordList = [];
 let hasFirstInput = false;
 
 function insertToList(word) {
@@ -10,7 +10,7 @@ function insertToList(word) {
 
 function findElementInArray(word) { //lol too lazy
   let res = false;
-  list.forEach(element => {
+  wordList.forEach(element => {
     if(element == word) res = true;
   });
   return res;
@@ -34,6 +34,7 @@ $( function() {
 function generateTable() {
   $('#section-main-page').append("<table id='lexical-table'></table>");
   $('#lexical-table').append("<thead id='table-head'></thead>");
+  $('$lexical-table').append("<tbody id='table-body'></tbody>");
 
   $('#table-head').append("<th class=table-head-element>δ</th>");
   for(let i = 0; i < 26; i++) {
@@ -46,7 +47,8 @@ function generateTable() {
   "border": "white solid 1px", 
   "width": "calc((100vw * 0.75) / 26)", 
   "height": "calc((100vw * 0.75) / 31)"})
-  
+}
 
-
+function appendTable() {
+  $("#table-body").append()
 }

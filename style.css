@@ -19,6 +19,59 @@ body {
     flex-flow: column wrap;
 }
 
+#lexical-table {
+    display: flex;
+    flex-flow: column;
+}
+
+#table-head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+tr {
+    display: flex;
+    
+}
+
+#table-head-main-element {
+    border: solid black 1px;
+    border-left: solid black 1px;
+}
+
+.table-head-element {
+  border-top: black solid 1px;
+  border-right: black solid 1px;
+  border-bottom: black solid 1px;
+  width: calc((100vw * 0.75) / 26); 
+  height: calc((100vw * 0.75) / 31);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-terminal-head {
+  border-left: black solid 1px;
+  border-right: black solid 1px;
+  border-bottom: black solid 1px;
+  width: calc((100vw * 0.75) / 26); 
+  height: calc((100vw * 0.75) / 31);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-terminal {
+  border-right: black solid 1px;
+  border-bottom: black solid 1px;
+  width: calc((100vw * 0.75) / 26); 
+  height: calc((100vw * 0.75) / 31);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #section-input {
     display: flex;
     width: 100%;

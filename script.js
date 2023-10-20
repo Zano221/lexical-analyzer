@@ -1,6 +1,11 @@
 let automatoFinito = [[]]
 let wordList = [];
 let hasFirstInput = false;
+let automata_length = 0
+
+const DEFAULT_STATE = "q0";
+let STATE = DEFAULT_STATE;
+
 
 function insertToList(word) {
     
@@ -36,13 +41,15 @@ function appendToTable() {
 
   console.log("NÃO IMPLEMENTADO")
 
-  $('#lexical-table').append("<tbody id='table-body'></tbody>");
-  $("#table-body").append("<tr id='automata-instance'></tr>")
-  $('#automata-instance').append("<td class='table-terminal-head'>q0</td>");
+  automata_length++;
+  let row_instance = `automata-instance-${automata_length}`
+
+  $('#table-body').append(`<tr id=${row_instance}></tr>`)
+  $(`#${row_instance}`).append(`<td class='table-terminal-head'>${STATE}</td>`);
   for(let i = 0; i < 26; i++) {
 
-    var _stateElement = "<td class=table-terminal> q0 </td>";
-    $('#automata-instance').append(_stateElement);
+    var _stateElement = `<td class=table-terminal> ${STATE} </td>`;
+    $(`#${row_instance}`).append(_stateElement);
   }
 }
 

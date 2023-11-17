@@ -1,11 +1,46 @@
-let automatoFinito = [[]]
+let matrix = []; // M[STATE, SYMBOL] = NEW_STATE, EXEMPLO (string "abc"): M[0]["a"] = 1, M[1]["b"] = 2, M[2]["c"] = 3 (final),
 let wordList = [];
 let hasFirstInput = false;
-let automata_length = 0
+let automata_length = 0;
+let finalStates = [];
 
-const DEFAULT_STATE = "q0";
+const DEFAULT_STATE = 0;
 let STATE = DEFAULT_STATE;
 
+
+
+
+
+
+
+// FUNÇÃO MAIN
+$( function() {
+
+  initializeMatrix();
+
+    $("#insert-button").click(function() {
+      const word = $("#insert-input").val()
+      console.log(word)
+      
+      if(findElementInArray(word) || word == "") return;
+      
+      //if(!hasFirstInput)  generateTable()
+
+      
+
+      hasFirstInput = true;
+      
+      insertToList(word)
+      appendToTable(word);
+    })
+})
+
+
+
+
+
+
+function switchState(state) { STATE = state }
 
 function insertToList(word) {
     
@@ -21,37 +56,92 @@ function findElementInArray(word) { //lol too lazy
   return res;
 }
 
-$( function() {
+function appendToTable(word) {
 
-    $("#insert-button").click(function() {
-      const word = $("#insert-input").val()
+
+  let letter_pos = 0;
+  for(let l = 0; l < word.length; l++) {
+    
+    letter = word[l];
+    let row_instance = `automata-instance-${automata_length}` // vai ser o id da primeira coluna de cada linha da matriz ex δ `automata-instance-0 = q0`
+
+    // Esse codigo abaixo vai renderizar o header (primera coluna) de cada linha, vai atribuir um o id `automata-instance-{NUMERO}` para cada head
+
+    $('#table-body').append(`<tr id=${row_instance}></tr>`) // atribuir o o id da primeira coluna a cada linha novamente
+    let current_state = `q${automata_length}`; // atribuir o valor q{ESTADO} à uma variavel q salva o estado
+    $(`#${row_instance}`).append(`<td class='table-terminal-head'>${current_state}</td>`); // atribuir essa variavel do q{ESTADO} à coluna
+
+
+    //INSERIR NA MATRIZ DO AUTOMATO FINITOz`
+
+    appendToMatrix(letter)
+
+    // Esse codigo abaixo, vai renderizar o resto das linhas da matriz, seguindo o alfabeto inteiro
+    for(let i = 0; i < 26; i++) {
+
+      let shown_state;
+      let current_position = automata_length-1;
+
+      //console.log(matrix[current_position][String.fromCharCode('a'.charCodeAt(0) + i)])
       
-      if(findElementInArray(word) || word == "") return;
-      
-      //if(!hasFirstInput)  generateTable()
+      if(matrix[current_position] === undefined || matrix[current_position][String.fromCharCode('a'.charCodeAt(0) + i)] === undefined) {
+        shown_state = `-`
 
-      hasFirstInput = true;
-      
-      insertToList(word)
-      appendToTable();
-    })
-})
+      }
+      else {
+        shown_state = `q${matrix[current_position][String.fromCharCode('a'.charCodeAt(0) + i)]}`
+      }
 
-function appendToTable() {
+      const _stateElement = `<td class=table-terminal id='table-terminal-${current_state}'> ${shown_state} </td>`;
+      $(`#${row_instance}`).append(_stateElement);
+    }
 
-  console.log("NÃO IMPLEMENTADO")
+    letter_pos++;
+  }
+
+}
+
+
+// FUNÇÕES DA MATRIZ DO AUTOMATO FINITO 
+function initializeMatrix() {
+  
+}
+
+function appendToMatrix(letter) {
+
+  // Aqui o estado é nomeado como automata_length
+
+  //console.log(matrix);
+
+  matrix.push(Array(26)); // Crio uma nova linha contendo todo o alfabeto, cada letra vai ser inserida ali
+  matrix[automata_length][letter] = automata_length+1;
 
   automata_length++;
-  let row_instance = `automata-instance-${automata_length}`
-
-  $('#table-body').append(`<tr id=${row_instance}></tr>`)
-  $(`#${row_instance}`).append(`<td class='table-terminal-head'>${STATE}</td>`);
-  for(let i = 0; i < 26; i++) {
-
-    var _stateElement = `<td class=table-terminal> ${STATE} </td>`;
-    $(`#${row_instance}`).append(_stateElement);
-  }
 }
+
+function searchOnMatrix(letter) {
+
+  //Ira usar o estado atual para pesquizar
+  let prev_state = STATE;
+  if(matrix[STATE][letter] !== null) switchState(matrix[STATE][letter]);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // USAR PARA DEPOIS SE POSSIVEL

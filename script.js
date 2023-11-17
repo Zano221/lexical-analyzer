@@ -1,7 +1,7 @@
 let matrix = []; // M[STATE, SYMBOL] = NEW_STATE, EXEMPLO (string "abc"): M[0]["a"] = 1, M[1]["b"] = 2, M[2]["c"] = 3 (final),
 let wordList = [];
-let hasFirstInput = false;
 let automata_length = 0;
+let table_length = 0;
 let finalStates = [];
 
 const DEFAULT_STATE = 0;
@@ -19,33 +19,40 @@ $( function() {
   initializeMatrix();
 
     $("#insert-button").click(function() {
-      const word = $("#insert-input").val()
+      const word = $("#insert-input").val().toLowerCase();
       console.log(word)
       
       if(findElementInArray(word) || word == "") return;
       
-      //if(!hasFirstInput)  generateTable()
 
-      
+      // INSERIR NA LISTA DE PALAVRAS EXISTENTES
+      insertToList(word);
 
-      hasFirstInput = true;
-      
-      insertToList(word)
-      appendToTable(word);
+      //INSERIR NA MATRIZ DO AUTOMATO FINITO
+      appendToMatrix(word);
+
+      // INSERIR NA TABELA VISTA VISUALMENTE NA APLICAÇÃO
+      updateTable(word);
     })
+
+    /*$("#botao-morrer").click(function() {
+      $("#table-body").empty();
+    })*/
 })
-
-
-
-
 
 
 function switchState(state) { STATE = state }
 
 function insertToList(word) {
     
-    wordList.push(word)
-    console.log(wordList)
+  wordList.push(word)
+  console.log(wordList)
+
+  let wordList_length = wordList.length-1;
+
+  let _container = $("#word-list").append(`<div class='word-list-container' id='word-list-container-${wordList_length}'></div>`)
+  let _word = $(`#word-list-container-${wordList_length}`).append(`<p class='word-in-list' id='word-${wordList_length}'>${wordList[wordList_length]}</p>`)
+
 }
 
 function findElementInArray(word) { //lol too lazy
@@ -56,48 +63,61 @@ function findElementInArray(word) { //lol too lazy
   return res;
 }
 
-function appendToTable(word) {
+function updateTable() {
 
+  $("#table-body").empty(); // ANTES DE MAIS NADA: limpar a tabela anterior (se existe)
 
-  let letter_pos = 0;
-  for(let l = 0; l < word.length; l++) {
-    
-    letter = word[l];
-    let row_instance = `automata-instance-${automata_length}` // vai ser o id da primeira coluna de cada linha da matriz ex δ `automata-instance-0 = q0`
+  for(let matrix_row = 0; matrix_row < matrix.length; matrix_row++) {
 
-    // Esse codigo abaixo vai renderizar o header (primera coluna) de cada linha, vai atribuir um o id `automata-instance-{NUMERO}` para cada head
+    let current_position = matrix_row;
+    let row_instance = `matrix-instance-${matrix_row}` // vai ser o id da primeira coluna de cada linha da matriz ex δ `matrix-instance-0 = q0`
 
+    //////////////////////////////////////////////////////////////
+    // Esse codigo abaixo vai renderizar o header (primera coluna) de cada linha, vai atribuir um o id `matrix-instance-{NUMERO}` para cada head
+    /////////////////////////////////////////////////////////////
     $('#table-body').append(`<tr id=${row_instance}></tr>`) // atribuir o o id da primeira coluna a cada linha novamente
-    let current_state = `q${automata_length}`; // atribuir o valor q{ESTADO} à uma variavel q salva o estado
+    let current_state = `q${matrix_row}`; // atribuir o valor q{ESTADO} à uma variavel q salva o estado
     $(`#${row_instance}`).append(`<td class='table-terminal-head'>${current_state}</td>`); // atribuir essa variavel do q{ESTADO} à coluna
 
 
-    //INSERIR NA MATRIZ DO AUTOMATO FINITOz`
-
-    appendToMatrix(letter)
 
     // Esse codigo abaixo, vai renderizar o resto das linhas da matriz, seguindo o alfabeto inteiro
     for(let i = 0; i < 26; i++) {
 
       let shown_state;
-      let current_position = automata_length-1;
+      let letter = String.fromCharCode('a'.charCodeAt(0) + i);
 
-      //console.log(matrix[current_position][String.fromCharCode('a'.charCodeAt(0) + i)])
-      
-      if(matrix[current_position] === undefined || matrix[current_position][String.fromCharCode('a'.charCodeAt(0) + i)] === undefined) {
+      if(matrix[current_position] === undefined || matrix[current_position][letter] === undefined) {
         shown_state = `-`
-
       }
       else {
-        shown_state = `q${matrix[current_position][String.fromCharCode('a'.charCodeAt(0) + i)]}`
+        shown_state = `q${matrix[current_position][letter]}`
       }
 
-      const _stateElement = `<td class=table-terminal id='table-terminal-${current_state}'> ${shown_state} </td>`;
+      let _stateElement = `<td class=table-terminal id='table-terminal-${current_state}'> ${shown_state} </td>`;
       $(`#${row_instance}`).append(_stateElement);
     }
 
-    letter_pos++;
+    
+  
+  
+    table_length++;
   }
+
+
+  // ADICIONAR A LINHA DE TERMINO
+
+  /*let final_state = `q${matrix[automata_length-1]["FINAL"]}`
+  row_instance++;
+  table_length++;
+  $('#table-body').append(`<tr id=${row_instance}></tr>`) // atribuir o o id da primeira coluna a cada linha novamente
+  let current_state = `q${table_length}`; // atribuir o valor q{ESTADO} à uma variavel q salva o estado
+  $(`#${row_instance}`).append(`<td class='table-terminal-head'>${current_state}</td>`); // atribuir essa variavel do q{ESTADO} à coluna
+
+  
+  const _finalElement = `<td class=table-terminal-final id='table-terminal-*${final_state}'> ${final_state} </td>`;
+  $(`#${row_instance}`).append(_finalElement);*/
+
 
 }
 
@@ -107,16 +127,46 @@ function initializeMatrix() {
   
 }
 
-function appendToMatrix(letter) {
+function appendToMatrix(word) {
 
   // Aqui o estado é nomeado como automata_length
 
-  //console.log(matrix);
+  let same_word = true;
+  let length = word.length
+  for(let i = 0; i < length; i++) {
+   
+    let letter = word[i];
+    
 
-  matrix.push(Array(26)); // Crio uma nova linha contendo todo o alfabeto, cada letra vai ser inserida ali
-  matrix[automata_length][letter] = automata_length+1;
+    if(matrix[i] === undefined) {
+      matrix.push(Array(26)); // Crio uma nova linha contendo todo o alfabeto, cada letra vai ser inserida ali
+      if(matrix[i][letter] === undefined) {
+        matrix[automata_length][letter] = automata_length+1;  
+        automata_length++;
+      }
+    }
+    else if(matrix[i] !== undefined && matrix[i][letter] === undefined) {
+      matrix[i][letter] = automata_length+1;
+    }
 
-  automata_length++;
+
+    
+    
+    
+
+    /*if(i+1 === length) {
+      
+      const final_state = automata_length
+      matrix.push(Array(26)); 
+      matrix[automata_length]["FINAL"] = final_state;
+      finalStates.push(automata_length)
+      automata_length++;
+    }*/
+
+    
+  }
+  console.log(matrix);
+
 }
 
 function searchOnMatrix(letter) {

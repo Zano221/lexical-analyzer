@@ -81,7 +81,7 @@ tr {
 #section-input {
     display: flex;
     width: 100%;
-    height: 30%;
+    height: 40%;
     justify-content: space-between;
 }
 
@@ -91,11 +91,34 @@ tr {
     justify-content: center;
 }
 
-#add-search {
+#add-word {
     display: flex;
     flex-flow: column;
     border: rgba(255, 255, 255, 0.609) solid 1px;
 
+}
+
+#word-list {
+    margin-top: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    flex-grow: 1;
+    height: 20px;
+}
+
+.word-list-container {
+    display: flex;
+    flex-flow: row wrap;
+    height: 100%;
+    justify-content: space-around;
+    align-items: center;
+    border: black solid 2px;
+    margin-right: 5px;
+}
+
+.word-in-list {
+    display: flex;
+    margin:  0 5px 0 5px; 
 }
 
 #search-word {

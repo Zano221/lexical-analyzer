@@ -81,10 +81,11 @@ function updateTable() {
     $('#table-body').append(`<tr id=${row_instance}></tr>`) // atribuir o o id da primeira coluna a cada linha novamente
     let current_state = `q${matrix_row}`;
     
-    if(matrix_row == finalStates[last_state_pos]) { // atribuir o valor q{ESTADO} à uma variavel q salva o estado, incluindo o final *
-      current_state = `*` + current_state
-      last_state_pos++;
-    }
+    finalStates.map(val => {
+      if(matrix_row == val) {
+        current_state = `*` + current_state
+      }
+    })
     
     $(`#${row_instance}`).append(`<td class='table-terminal-head'>${current_state}</td>`); // atribuir essa variavel do q{ESTADO} à coluna
 

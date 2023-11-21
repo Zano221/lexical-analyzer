@@ -67,8 +67,11 @@ function updateTable() {
 
   $("#table-body").empty(); // ANTES DE MAIS NADA: limpar a tabela anterior (se existe)
 
+  console.log("MATRIX LENGTH =", matrix.length);
+
   for(let matrix_row = 0; matrix_row < matrix.length; matrix_row++) {
 
+    let last_state_pos = 0;
     let current_position = matrix_row;
     let row_instance = `matrix-instance-${matrix_row}` // vai ser o id da primeira coluna de cada linha da matriz ex δ `matrix-instance-0 = q0`
 
@@ -76,7 +79,13 @@ function updateTable() {
     // Esse codigo abaixo vai renderizar o header (primera coluna) de cada linha, vai atribuir um o id `matrix-instance-{NUMERO}` para cada head
     /////////////////////////////////////////////////////////////
     $('#table-body').append(`<tr id=${row_instance}></tr>`) // atribuir o o id da primeira coluna a cada linha novamente
-    let current_state = `q${matrix_row}`; // atribuir o valor q{ESTADO} à uma variavel q salva o estado
+    let current_state = `q${matrix_row}`;
+    
+    if(matrix_row == finalStates[last_state_pos]) { // atribuir o valor q{ESTADO} à uma variavel q salva o estado, incluindo o final *
+      current_state = `*` + current_state
+      last_state_pos++;
+    }
+    
     $(`#${row_instance}`).append(`<td class='table-terminal-head'>${current_state}</td>`); // atribuir essa variavel do q{ESTADO} à coluna
 
 
@@ -91,7 +100,7 @@ function updateTable() {
         shown_state = `-`
       }
       else {
-        shown_state = `q${matrix[current_position][letter]}`
+        shown_state = `q${matrix[current_position][letter]}`;
       }
 
       let _stateElement = `<td class=table-terminal id='table-terminal-${current_state}'> ${shown_state} </td>`;
@@ -133,39 +142,42 @@ function appendToMatrix(word) {
 
   let same_word = true;
   let length = word.length
+  
   for(let i = 0; i < length; i++) {
+    automata_length = matrix.length
    
     let letter = word[i];
-    
+    let current_position;
 
-    if(matrix[i] === undefined) {
+    if(!same_word) current_position = automata_length;
+    else current_position = i;
+
+    if(matrix[current_position] === undefined) { // Se não existe uma linha nessa posição, então cria uma nova, e define que a palavra obviamente não é a mesma
+      same_word = false;
       matrix.push(Array(26)); // Crio uma nova linha contendo todo o alfabeto, cada letra vai ser inserida ali
-      if(matrix[i][letter] === undefined) {
-        matrix[automata_length][letter] = automata_length+1;  
-        automata_length++;
+      current_position = matrix.length-1;
+      matrix[current_position][letter] = current_position+1;
+    } else {
+      if(matrix[current_position][letter] === undefined) { // Se existe uma linha nessa posição, checar se existe uma letra, se não, então defini como uma palavra diferente
+        same_word = false;
+        matrix[current_position][letter] = matrix.length;
       }
     }
-    else if(matrix[i] !== undefined && matrix[i][letter] === undefined) {
-      matrix[i][letter] = automata_length+1;
-    }
+    automata_length = matrix.length
 
-
-    
-    
-    
-
-    /*if(i+1 === length) {
-      
-      const final_state = automata_length
-      matrix.push(Array(26)); 
-      matrix[automata_length]["FINAL"] = final_state;
-      finalStates.push(automata_length)
-      automata_length++;
-    }*/
-
+    console.log(same_word);
+    console.log(current_position);
     
   }
-  console.log(matrix);
+
+  const final_state = matrix.length-1;
+  matrix.push(Array(26)); 
+  matrix[final_state]["FINAL"] = 0;
+  finalStates.push(final_state+1)
+  automata_length++;
+  //console.log(finalStates)
+  console.log(automata_length);
+  console.log(finalStates);
 
 }
 

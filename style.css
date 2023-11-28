@@ -68,7 +68,7 @@ tr {
   align-items: center;
 }
 
-.table-terminal {
+.table-cell {
   border-right: black solid 1px;
   border-bottom: black solid 1px;
   width: calc((100vw * 0.75) / 26); 
@@ -127,4 +127,16 @@ tr {
 
 #insert-button {
     margin-top: 10px;
+}
+
+.correct-cell {
+    background-color: lightgreen;
+}
+
+.wrong-cell {
+    background-color: lightcoral;
+}
+
+.selection-cell {
+    background-color: rgb(192, 234, 192);
 }

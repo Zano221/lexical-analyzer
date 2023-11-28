@@ -67,6 +67,7 @@ $( function() {
 
           for(let j = 0; j < ALPHABET_SIZE; j++) {
             const letter = String.fromCharCode('a'.charCodeAt(0) + j);
+            
             $(`.cell-q${selected_state}-${letter}`).addClass("selection-cell"); 
           }
 

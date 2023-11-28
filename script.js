@@ -21,6 +21,9 @@ $( function() {
 
   initializeMatrix();
 
+  $("#insert-input").val("");
+  $("#search-input").val("");
+
     $("#insert-button").click(function() {
       const word = $("#insert-input").val().toLowerCase();
       console.log(word)
@@ -37,6 +40,8 @@ $( function() {
 
       // INSERIR NA TABELA VISTA VISUALMENTE NA APLICAÇÃO
       updateTable(word);
+
+      $("#insert-input").val("");
     })
 
     $("#search-input").keyup(function() {
@@ -73,8 +78,6 @@ $( function() {
           }
 
           selected_state = matrix[selected_state][word[i]];
-          
-          
 
         }
         else {
@@ -84,6 +87,8 @@ $( function() {
           break;
         }
       }
+
+      $("#insert-input").val("");
     });
 })
 
@@ -169,38 +174,27 @@ function appendToMatrix(word) {
 
   let same_word = true;
   let length = word.length
-  
+  let current_position = DEFAULT_STATE;
+
   for(let i = 0; i < length; i++) {
     automata_length = matrix.length
    
     let letter = word[i];
-    let current_position;
-
-    if(!same_word)  {
-      console.log("LIXO QUEBROU EM = ", letter)
-      current_position = automata_length;
-    }
-    else current_position = i;
-
 
     let test_next_state;
-    let next_state;
     if(matrix[current_position] === undefined) { // Se não existe uma linha nessa posição, então cria uma nova, e define que a palavra obviamente não é a mesma
       same_word = false;
       matrix.push(Array(ALPHABET_SIZE)); // Crio uma nova linha contendo todo o alfabeto, cada letra vai ser inserida ali
       current_position = matrix.length-1;
       matrix[current_position][letter] = current_position+1;
-    } else {
-      if(matrix[current_position][letter] === undefined) { // Se existe uma linha nessa posição, checar se existe uma letra, se não, então defini como uma palavra diferente
-        same_word = false;
-        matrix[current_position][letter] = matrix.length;
-      }
+    } else if(matrix[current_position][letter] === undefined) { // Se existe uma linha nessa posição, checar se existe uma letra, se não, então defini como uma palavra diferente
+      same_word = false;
+      matrix[current_position][letter] = matrix.length;
     }
 
-    test_next_state = matrix[current_position][letter];
     automata_length = matrix.length
-
-    //console.log(current_position);
+    if(!same_word)  current_position = automata_length;
+    else current_position = matrix[current_position][letter];
 
     console.log("ESTADO: ", current_position, "LETRA: ", letter, "PROXIMO ESTADO:", test_next_state);
     

@@ -129,8 +129,8 @@ tr {
     margin-top: 10px;
 }
 
-.correct-cell {
-    background-color: lightgreen;
+.correct-cell important {
+    background-color: rgb(0, 228, 0);
 }
 
 .wrong-cell {
@@ -138,5 +138,5 @@ tr {
 }
 
 .selection-cell {
-    background-color: rgb(192, 234, 192);
+    background-color: lightgreen;
 }

@@ -72,10 +72,9 @@ function insertWord(word) {
 function insertToList(word) {
     
   wordList.push(word)
-  console.log(wordList)
-
   let wordList_length = wordList.length-1;
 
+  // Essa seção insere os containers das palavras vistos visualmente debaixo do botão de inserção 
   let _container = $("#word-list").append(`<div class='word-list-container' id='word-list-container-${wordList_length}'></div>`)
   let _word = $(`#word-list-container-${wordList_length}`).append(`<p class='word-in-list' id='word-${wordList_length}'>${wordList[wordList_length]}</p>`)
 
@@ -108,6 +107,7 @@ function updateTable() {
     $('#table-body').append(`<tr id=${row_instance}></tr>`) // atribuir o o id da primeira coluna a cada linha novamente
     let current_state = `q${matrix_row}`;
     
+    // Itera pelos estados finais se eles correspondem à variavel matrix_row
     finalStates.map(val => {
       if(matrix_row == val) {
         current_state = `*` + current_state
@@ -223,5 +223,6 @@ function search(word) {
     }
   }
 
+  // Limba o input de inserção à matriz e o automato
   $("#insert-input").val("");
 }
